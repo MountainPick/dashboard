@@ -14,7 +14,10 @@ const CameraStream: React.FC = () => {
         const ws = new WebSocket(`ws://${currentHost}:8000/ws`);
 
         ws.onmessage = (event) => {
-            setImageUrl(`data:image/jpeg;base64,${event.data}`);
+            const data = JSON.parse(event.data);
+            if (data.type === 'frame') {
+                setImageUrl(`data:image/jpeg;base64,${data.frame}`);
+            }
         };
 
         ws.onclose = () => {

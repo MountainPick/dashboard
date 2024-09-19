@@ -1,4 +1,4 @@
-// File: /Users/thainguyen/Working/Neuweb/Flexy-admin-Nextjs-Free/src/app/(DashboardLayout)/camera-dashboard/page.tsx
+// File: /Users/thainguyen/Working/Neuweb/DashboardResponsive/src/app/(DashboardLayout)/camera-dashboard/page.tsx
 import * as entry from '../../../../../src/app/(DashboardLayout)/camera-dashboard/page.js'
 import type { ResolvingMetadata } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

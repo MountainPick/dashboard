@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Menu,
@@ -13,9 +13,52 @@ import {
     Button,
 } from "@mui/material";
 import { IconBell } from "@tabler/icons-react";
+import { useRouter } from 'next/navigation';
+
+interface Notification {
+    id: number;
+    title: string;
+    description: string;
+    avatar: string;
+    frame_id: number;
+    camera: {
+        id: string;
+        name: string;
+        location: string;
+        model: string;
+        status: string;
+        statusColor: string;
+        lastMaintenance: string;
+    };
+}
 
 const Notifications = () => {
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const router = useRouter();
+
+    useEffect(() => {
+        const socket = new WebSocket('ws://localhost:8000/ws');
+
+        socket.onopen = () => {
+            console.log('WebSocket connection established');
+        };
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'notification') {
+                setNotifications(prevNotifications => [...prevNotifications, data]);
+            }
+        };
+
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        return () => {
+            socket.close();
+        };
+    }, []);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -25,26 +68,10 @@ const Notifications = () => {
         setAnchorEl(null);
     };
 
-    const notifications = [
-        {
-            id: 1,
-            title: "Motion Detected",
-            description: "Movement detected in the living room",
-            avatar: "/images/icons/motion-sensor.png",
-        },
-        {
-            id: 2,
-            title: "Door Opened",
-            description: "Front door opened unexpectedly",
-            avatar: "/images/icons/door-sensor.png",
-        },
-        {
-            id: 3,
-            title: "Unidentified Person",
-            description: "Unknown individual spotted in backyard",
-            avatar: "/images/icons/camera-alert.png",
-        },
-    ];
+    const handleNotificationClick = (notification: Notification) => {
+        router.push(`/notification-details?camera_id=${notification.camera.id}&frame_id=${notification.frame_id}`);
+        handleClose();
+    };
 
     return (
         <Box>
@@ -80,7 +107,12 @@ const Notifications = () => {
                 </Box>
                 <List>
                     {notifications.map((notification) => (
-                        <ListItem key={notification.id} alignItems="flex-start">
+                        <ListItem
+                            key={notification.id}
+                            alignItems="flex-start"
+                            onClick={() => handleNotificationClick(notification)}
+                            sx={{ cursor: 'pointer' }}
+                        >
                             <ListItemAvatar>
                                 <Avatar alt="User Avatar" src={notification.avatar} />
                             </ListItemAvatar>

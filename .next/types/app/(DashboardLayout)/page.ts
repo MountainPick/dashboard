@@ -1,4 +1,4 @@
-// File: /Users/thainguyen/Working/Neuweb/Flexy-admin-Nextjs-Free/src/app/(DashboardLayout)/page.tsx
+// File: /Users/thainguyen/Working/Neuweb/DashboardResponsive/src/app/(DashboardLayout)/page.tsx
 import * as entry from '../../../../src/app/(DashboardLayout)/page.js'
 import type { ResolvingMetadata } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
