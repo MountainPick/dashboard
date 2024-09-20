@@ -15,21 +15,31 @@ import {
 import { IconBell } from "@tabler/icons-react";
 import { useRouter } from 'next/navigation';
 
+interface Camera {
+    id: string;
+    name: string;
+    location: string;
+    model: string;
+    status: string;
+    statusColor: string;
+    lastMaintenance: string;
+}
+
 interface Notification {
     id: number;
     title: string;
     description: string;
     avatar: string;
     frame_id: number;
-    camera: {
-        id: string;
-        name: string;
-        location: string;
-        model: string;
-        status: string;
-        statusColor: string;
-        lastMaintenance: string;
-    };
+    camera_id: string;
+    camera_last_maintenance: string;
+    camera_location: string;
+    camera_model: string;
+    camera_name: string;
+    camera_status: string;
+    camera_status_color: string;
+    timestamp: string;
+    camera?: Camera; // Made camera optional to prevent TypeError
 }
 
 const Notifications = () => {
@@ -38,26 +48,25 @@ const Notifications = () => {
     const router = useRouter();
 
     useEffect(() => {
-        const socket = new WebSocket('ws://localhost:8000/ws');
-
-        socket.onopen = () => {
-            console.log('WebSocket connection established');
-        };
-
-        socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'notification') {
-                setNotifications(prevNotifications => [...prevNotifications, data]);
+        const fetchNotifications = async () => {
+            try {
+                const response = await fetch('http://localhost:8000/notifications');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                console.log('data', data);
+                setNotifications(data);
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+                setNotifications([]);
             }
         };
 
-        socket.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
+        fetchNotifications();
+        const intervalId = setInterval(fetchNotifications, 15000);
 
-        return () => {
-            socket.close();
-        };
+        return () => clearInterval(intervalId);
     }, []);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -69,7 +78,7 @@ const Notifications = () => {
     };
 
     const handleNotificationClick = (notification: Notification) => {
-        router.push(`/notification-details?camera_id=${notification.camera.id}&frame_id=${notification.frame_id}`);
+        router.push(`/notification-details?camera_id=${notification.camera_id}&frame_id=${notification.frame_id}`);
         handleClose();
     };
 
@@ -106,7 +115,7 @@ const Notifications = () => {
                     <Typography variant="h6">Notifications</Typography>
                 </Box>
                 <List>
-                    {notifications.map((notification) => (
+                    {Array.isArray(notifications) && notifications.map((notification) => (
                         <ListItem
                             key={notification.id}
                             alignItems="flex-start"

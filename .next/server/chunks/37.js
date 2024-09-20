@@ -312,25 +312,23 @@ const Notifications = ()=>{
     const [notifications, setNotifications] = (0,react_.useState)([]);
     const router = (0,navigation.useRouter)();
     (0,react_.useEffect)(()=>{
-        const socket = new WebSocket("ws://localhost:8000/ws");
-        socket.onopen = ()=>{
-            console.log("WebSocket connection established");
-        };
-        socket.onmessage = (event)=>{
-            const data = JSON.parse(event.data);
-            if (data.type === "notification") {
-                setNotifications((prevNotifications)=>[
-                        ...prevNotifications,
-                        data
-                    ]);
+        const fetchNotifications = async ()=>{
+            try {
+                const response = await fetch("http://localhost:8000/notifications");
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                const data = await response.json();
+                console.log("data", data);
+                setNotifications(data);
+            } catch (error) {
+                console.error("Error fetching notifications:", error);
+                setNotifications([]);
             }
         };
-        socket.onerror = (error)=>{
-            console.error("WebSocket error:", error);
-        };
-        return ()=>{
-            socket.close();
-        };
+        fetchNotifications();
+        const intervalId = setInterval(fetchNotifications, 15000);
+        return ()=>clearInterval(intervalId);
     }, []);
     const handleClick = (event)=>{
         setAnchorEl(event.currentTarget);
@@ -339,7 +337,7 @@ const Notifications = ()=>{
         setAnchorEl(null);
     };
     const handleNotificationClick = (notification)=>{
-        router.push(`/notification-details?camera_id=${notification.camera.id}&frame_id=${notification.frame_id}`);
+        router.push(`/notification-details?camera_id=${notification.camera_id}&frame_id=${notification.frame_id}`);
         handleClose();
     };
     return /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.Box, {
@@ -390,7 +388,7 @@ const Notifications = ()=>{
                         })
                     }),
                     /*#__PURE__*/ jsx_runtime_.jsx(node.List, {
-                        children: notifications.map((notification)=>/*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.ListItem, {
+                        children: Array.isArray(notifications) && notifications.map((notification)=>/*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.ListItem, {
                                 alignItems: "flex-start",
                                 onClick: ()=>handleNotificationClick(notification),
                                 sx: {
