@@ -76,7 +76,7 @@ const CameraDashboard = () => {
   };
 
   const connectWebSocket = () => {
-    const socket = new WebSocket('ws://localhost:8000/ws');
+    const socket = new WebSocket('ws://3.27.194.81:8000/ws');
 
     socket.onopen = () => {
       console.log('WebSocket connection established');
