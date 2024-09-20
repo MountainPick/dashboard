@@ -130,7 +130,7 @@ const Profile = ()=>{
         // Clear the login state from localStorage
         localStorage.removeItem("isLoggedIn");
         // Redirect to the login page
-        router.push("/login");
+        window.location.href = "login";
     };
     return /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.Box, {
         children: [
@@ -314,7 +314,7 @@ const Notifications = ()=>{
     (0,react_.useEffect)(()=>{
         const fetchNotifications = async ()=>{
             try {
-                const response = await fetch("http://3.27.194.81:8000/notifications");
+                const response = await fetch("http://localhost:8000/notifications");
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }

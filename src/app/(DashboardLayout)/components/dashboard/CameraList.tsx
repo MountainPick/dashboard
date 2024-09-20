@@ -37,8 +37,8 @@ const cameras = [
     name: "Garage Camera",
     location: "Garage",
     model: "SecureCam Lite",
-    status: "Online",
-    statusColor: "success.main",
+    status: "Offline",
+    statusColor: "error.main",
     lastMaintenance: "2023-05-10",
   },
   {
@@ -56,7 +56,9 @@ const CameraList = () => {
   const router = useRouter();
 
   const handleCameraClick = (cameraId: string) => {
-    router.push(`/camera-stream?cameraId=${cameraId}`);
+    if (cameraId === "1") {
+      router.push(`/camera-stream?cameraId=${cameraId}`);
+    }
   };
 
   return (
@@ -110,7 +112,10 @@ const CameraList = () => {
               <TableRow
                 key={camera.id}
                 onClick={() => handleCameraClick(camera.id)}
-                sx={{ cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
+                sx={{
+                  cursor: camera.id === "1" ? 'pointer' : 'not-allowed',
+                  '&:hover': camera.id === "1" ? { backgroundColor: 'action.hover' } : {}
+                }}
               >
                 <TableCell>
                   <Typography fontSize="15px" fontWeight={500}>

@@ -345,59 +345,251 @@ __webpack_require__.r(__webpack_exports__);
 /***/ 49560:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 63408))
+Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 6101))
 
 /***/ }),
 
-/***/ 63408:
+/***/ 6101:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(56786);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17421);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_mui_material__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _mui_material_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(83476);
-/* harmony import */ var _mui_material_styles__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_mui_material_styles__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _app_DashboardLayout_components_dashboard_CameraList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(63924);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "default": () => (/* binding */ page)
+});
+
+// EXTERNAL MODULE: external "next/dist/compiled/react/jsx-runtime"
+var jsx_runtime_ = __webpack_require__(56786);
+// EXTERNAL MODULE: ./node_modules/@mui/material/node/index.js
+var node = __webpack_require__(17421);
+// EXTERNAL MODULE: ./node_modules/@mui/material/node/styles/index.js
+var styles = __webpack_require__(83476);
+// EXTERNAL MODULE: external "next/dist/compiled/react"
+var react_ = __webpack_require__(18038);
+// EXTERNAL MODULE: ./node_modules/next/navigation.js
+var navigation = __webpack_require__(57114);
+// EXTERNAL MODULE: ./src/app/(DashboardLayout)/components/shared/DashboardCard.tsx
+var DashboardCard = __webpack_require__(36434);
+;// CONCATENATED MODULE: ./src/app/(DashboardLayout)/components/dashboard/CameraList.tsx
+
+
+
+
+
+const cameras = [
+    {
+        id: "1",
+        name: "Front Door Camera",
+        location: "Entrance",
+        model: "SecureCam Pro",
+        status: "Online",
+        statusColor: "success.main",
+        lastMaintenance: "2023-05-15"
+    },
+    {
+        id: "2",
+        name: "Backyard Camera",
+        location: "Rear Garden",
+        model: "OutdoorVision X",
+        status: "Offline",
+        statusColor: "error.main",
+        lastMaintenance: "2023-04-20"
+    },
+    {
+        id: "3",
+        name: "Garage Camera",
+        location: "Garage",
+        model: "SecureCam Lite",
+        status: "Offline",
+        statusColor: "error.main",
+        lastMaintenance: "2023-05-10"
+    },
+    {
+        id: "4",
+        name: "Living Room Camera",
+        location: "Living Room",
+        model: "IndoorVision 360",
+        status: "Maintenance",
+        statusColor: "warning.main",
+        lastMaintenance: "2023-05-18"
+    }
+];
+const CameraList = ()=>{
+    const router = (0,navigation.useRouter)();
+    const handleCameraClick = (cameraId)=>{
+        if (cameraId === "1") {
+            router.push(`/camera-stream?cameraId=${cameraId}`);
+        }
+    };
+    return /*#__PURE__*/ jsx_runtime_.jsx(DashboardCard/* default */.Z, {
+        title: "Camera List",
+        children: /*#__PURE__*/ jsx_runtime_.jsx(node.TableContainer, {
+            sx: {
+                width: {
+                    xs: "274px",
+                    sm: "100%"
+                }
+            },
+            children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.Table, {
+                "aria-label": "camera list table",
+                sx: {
+                    whiteSpace: "nowrap",
+                    mt: 2
+                },
+                children: [
+                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableHead, {
+                        children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.TableRow, {
+                            children: [
+                                /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                        color: "textSecondary",
+                                        variant: "h6",
+                                        children: "Id"
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                        color: "textSecondary",
+                                        variant: "h6",
+                                        children: "Name"
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                        color: "textSecondary",
+                                        variant: "h6",
+                                        children: "Location"
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                        color: "textSecondary",
+                                        variant: "h6",
+                                        children: "Status"
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                    align: "right",
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                        color: "textSecondary",
+                                        variant: "h6",
+                                        children: "Last Maintenance"
+                                    })
+                                })
+                            ]
+                        })
+                    }),
+                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableBody, {
+                        children: cameras.map((camera)=>/*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.TableRow, {
+                                onClick: ()=>handleCameraClick(camera.id),
+                                sx: {
+                                    cursor: camera.id === "1" ? "pointer" : "not-allowed",
+                                    "&:hover": camera.id === "1" ? {
+                                        backgroundColor: "action.hover"
+                                    } : {}
+                                },
+                                children: [
+                                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                            fontSize: "15px",
+                                            fontWeight: 500,
+                                            children: camera.id
+                                        })
+                                    }),
+                                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Box, {
+                                            display: "flex",
+                                            alignItems: "center",
+                                            children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.Box, {
+                                                children: [
+                                                    /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                                        variant: "h6",
+                                                        fontWeight: 600,
+                                                        children: camera.name
+                                                    }),
+                                                    /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                                        color: "textSecondary",
+                                                        fontSize: "13px",
+                                                        children: camera.model
+                                                    })
+                                                ]
+                                            })
+                                        })
+                                    }),
+                                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                            color: "textSecondary",
+                                            variant: "h6",
+                                            children: camera.location
+                                        })
+                                    }),
+                                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Chip, {
+                                            sx: {
+                                                pl: "4px",
+                                                pr: "4px",
+                                                backgroundColor: camera.statusColor,
+                                                color: "#fff"
+                                            },
+                                            size: "small",
+                                            label: camera.status
+                                        })
+                                    }),
+                                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                        align: "right",
+                                        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                            variant: "h6",
+                                            children: camera.lastMaintenance
+                                        })
+                                    })
+                                ]
+                            }, camera.id))
+                    })
+                ]
+            })
+        })
+    });
+};
+/* harmony default export */ const dashboard_CameraList = (CameraList);
+
+;// CONCATENATED MODULE: ./src/app/(DashboardLayout)/ui-components/table/page.tsx
 /* __next_internal_client_entry_do_not_use__ default auto */ 
 
 
-const Item = (0,_mui_material_styles__WEBPACK_IMPORTED_MODULE_1__.styled)(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Paper)(({ theme })=>({
+const Item = (0,styles.styled)(node.Paper)(({ theme })=>({
         ...theme.typography.body1,
         textAlign: "center",
         color: theme.palette.text.secondary,
         height: 60,
         lineHeight: "60px"
     }));
-const darkTheme = (0,_mui_material_styles__WEBPACK_IMPORTED_MODULE_1__.createTheme)({
+const darkTheme = (0,styles.createTheme)({
     palette: {
         mode: "dark"
     }
 });
-const lightTheme = (0,_mui_material_styles__WEBPACK_IMPORTED_MODULE_1__.createTheme)({
+const lightTheme = (0,styles.createTheme)({
     palette: {
         mode: "light"
     }
 });
 
 const Tables = ()=>{
-    return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Grid, {
+    return /*#__PURE__*/ jsx_runtime_.jsx(node.Grid, {
         container: true,
         spacing: 0,
-        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Grid, {
+        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Grid, {
             item: true,
             xs: 12,
             lg: 12,
-            children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_app_DashboardLayout_components_dashboard_CameraList__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z, {})
+            children: /*#__PURE__*/ jsx_runtime_.jsx(dashboard_CameraList, {})
         })
     });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Tables);
+/* harmony default export */ const page = (Tables);
 
 
 /***/ }),
@@ -435,7 +627,7 @@ const __default__ = proxy.default;
 var __webpack_require__ = require("../../../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [697,433,37,434,924], () => (__webpack_exec__(49127)));
+var __webpack_exports__ = __webpack_require__.X(0, [697,433,37,434], () => (__webpack_exec__(49127)));
 module.exports = __webpack_exports__;
 
 })();

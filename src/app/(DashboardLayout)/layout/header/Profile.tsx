@@ -74,7 +74,7 @@ const Profile = () => {
     // Clear the login state from localStorage
     localStorage.removeItem('isLoggedIn');
     // Redirect to the login page
-    router.push('/login');
+    window.location.href = 'login'
   };
 
   return (

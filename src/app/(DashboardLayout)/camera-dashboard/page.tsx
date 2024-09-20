@@ -1,21 +1,10 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { Grid, Paper, Tabs, Tab, Box, Typography, Chip, Modal } from "@mui/material";
+import { useState } from 'react';
+import { Grid, Tabs, Tab, Box, Typography, Chip, Table, TableBody, TableCell, TableHead, TableRow, TableContainer } from "@mui/material";
 import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import CameraList from "@/app/(DashboardLayout)/components/dashboard/CameraList";
 import { useRouter } from 'next/navigation';
-
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body1,
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  height: 60,
-  lineHeight: '60px',
-}));
-
-const darkTheme = createTheme({ palette: { mode: 'dark' } });
-const lightTheme = createTheme({ palette: { mode: 'light' } });
+import { useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
 
 const cameras = [
   {
@@ -32,7 +21,7 @@ const cameras = [
     name: "Backyard Camera",
     location: "Rear Garden",
     model: "OutdoorVision X",
-    status: "Offline",
+    status: "Disabled",
     statusColor: "error.main",
     lastMaintenance: "2023-04-20",
   },
@@ -41,8 +30,8 @@ const cameras = [
     name: "Garage Camera",
     location: "Garage",
     model: "SecureCam Lite",
-    status: "Online",
-    statusColor: "success.main",
+    status: "Disabled",
+    statusColor: "error.main",
     lastMaintenance: "2023-05-10",
   },
   {
@@ -50,16 +39,14 @@ const cameras = [
     name: "Living Room Camera",
     location: "Living Room",
     model: "IndoorVision 360",
-    status: "Maintenance",
-    statusColor: "warning.main",
+    status: "Disabled",
+    statusColor: "error.main",
     lastMaintenance: "2023-05-18",
   },
 ];
 
 const CameraDashboard = () => {
   const [tabValue, setTabValue] = useState(0);
-  const [openModal, setOpenModal] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState('');
   const router = useRouter();
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -68,39 +55,8 @@ const CameraDashboard = () => {
 
   const handleCameraClick = (cameraId: string) => {
     if (cameraId === "1") {
-      setOpenModal(true);
-      connectWebSocket();
-    } else {
       router.push(`/camera-stream?cameraId=${cameraId}`);
     }
-  };
-
-  const connectWebSocket = () => {
-    const socket = new WebSocket('ws://3.27.194.81:8000/ws');
-
-    socket.onopen = () => {
-      console.log('WebSocket connection established');
-    };
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'frame') {
-        // setCurrentFrame(data.frame);
-        console.log(data);
-      }
-    };
-
-    socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    return () => {
-      socket.close();
-    };
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
   };
 
   return (
@@ -110,11 +66,72 @@ const CameraDashboard = () => {
         <Tab label="Grid View" />
       </Tabs>
       {tabValue === 0 && (
-        <Grid container spacing={0}>
-          <Grid item xs={12} lg={12}>
-            <CameraList />
-          </Grid>
-        </Grid>
+        <TableContainer>
+          <Table aria-label="camera list table">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <Typography color="textSecondary" variant="h6">Id</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography color="textSecondary" variant="h6">Name</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography color="textSecondary" variant="h6">Location</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography color="textSecondary" variant="h6">Status</Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Typography color="textSecondary" variant="h6">Last Maintenance</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {cameras.map((camera) => (
+                <TableRow
+                  key={camera.id}
+                  onClick={() => handleCameraClick(camera.id)}
+                  sx={{
+                    cursor: camera.id === "1" ? 'pointer' : 'not-allowed',
+                    '&:hover': camera.id === "1" ? { backgroundColor: 'action.hover' } : {},
+                    opacity: camera.id === "1" ? 1 : 0.5,
+                  }}
+                >
+                  <TableCell>
+                    <Typography fontSize="15px" fontWeight={500}>{camera.id}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Box display="flex" alignItems="center">
+                      <Box>
+                        <Typography variant="h6" fontWeight={600}>{camera.name}</Typography>
+                        <Typography color="textSecondary" fontSize="13px">{camera.model}</Typography>
+                      </Box>
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Typography color="textSecondary" variant="h6">{camera.location}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      sx={{
+                        pl: "4px",
+                        pr: "4px",
+                        backgroundColor: camera.statusColor,
+                        color: "#fff",
+                      }}
+                      size="small"
+                      label={camera.status}
+                    />
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="h6">{camera.lastMaintenance}</Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
       {tabValue === 1 && (
         <Grid container spacing={2}>
@@ -123,19 +140,17 @@ const CameraDashboard = () => {
               <DashboardCard>
                 <Box
                   onClick={() => handleCameraClick(camera.id)}
-                  sx={{ cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
+                  sx={{ cursor: camera.id === "1" ? 'pointer' : 'not-allowed', '&:hover': camera.id === "1" ? { backgroundColor: 'action.hover' } : {}, opacity: camera.id === "1" ? 1 : 0.5 }}
                 >
-                  <img src='/images/camera/camera-1.jpg' alt={camera.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                  {camera.id === "1" ? (
+                    <CameraStream />
+                  ) : (
+                    <img src={camera.status === "Disabled" ? 'https://t4.ftcdn.net/jpg/04/35/65/05/360_F_435650529_fdtx8euYTrcxH5NEAWONH2zQYOEWfgrA.jpg' : '/images/camera/camera-1.jpg'} alt={camera.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                  )}
                   <Box p={2}>
-                    <Typography variant="h6" fontWeight={600}>
-                      {camera.name}
-                    </Typography>
-                    <Typography color="textSecondary" fontSize="13px">
-                      {camera.model}
-                    </Typography>
-                    <Typography color="textSecondary" variant="body2">
-                      Location: {camera.location}
-                    </Typography>
+                    <Typography variant="h6" fontWeight={600}>{camera.name}</Typography>
+                    <Typography color="textSecondary" fontSize="13px">{camera.model}</Typography>
+                    <Typography color="textSecondary" variant="body2">Location: {camera.location}</Typography>
                     <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
                       <Chip
                         sx={{
@@ -147,9 +162,7 @@ const CameraDashboard = () => {
                         size="small"
                         label={camera.status}
                       />
-                      <Typography variant="body2">
-                        Last Maintenance: {camera.lastMaintenance}
-                      </Typography>
+                      <Typography variant="body2">Last Maintenance: {camera.lastMaintenance}</Typography>
                     </Box>
                   </Box>
                 </Box>
@@ -158,31 +171,67 @@ const CameraDashboard = () => {
           ))}
         </Grid>
       )}
-      <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        aria-labelledby="camera-stream-modal"
-        aria-describedby="live-camera-stream"
-      >
-        <Box sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '80%',
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 4,
-        }}>
-          <Typography id="camera-stream-modal" variant="h6" component="h2">
-            Live Camera Stream
-          </Typography>
-          {/* {currentFrame && (
-            <img src={`data:image/jpeg;base64,${currentFrame}`} alt="Live Stream" style={{ width: '100%', height: 'auto', marginTop: '20px' }} />
-          )} */}
-        </Box>
-      </Modal>
+    </Box>
+  );
+};
+
+const CameraStream: React.FC = () => {
+  const searchParams = useSearchParams();
+  const cameraId = searchParams.get('cameraId');
+  const [imageUrl, setImageUrl] = useState<string>('');
+
+  useEffect(() => {
+    const currentHost = window.location.hostname;
+    const ws = new WebSocket(`ws://${currentHost}:8000/ws`);
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'frame') {
+        setImageUrl(`data:image/jpeg;base64,${data.frame}`);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket closed. Attempting to reconnect...');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket Error: ', error);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '200px',
+        backgroundColor: '#F0F4FF',
+      }}
+    >
+      <Typography variant="h4" component="h1" gutterBottom>
+        Camera Stream {cameraId}
+      </Typography>
+      <Box
+        component="img"
+        src={imageUrl}
+        alt="Live Video Stream"
+        sx={{
+          maxWidth: '100%',
+          height: 'auto',
+          border: '1px solid #ddd',
+          borderRadius: '5px',
+        }}
+      />
     </Box>
   );
 };

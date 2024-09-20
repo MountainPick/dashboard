@@ -345,11 +345,11 @@ __webpack_require__.r(__webpack_exports__);
 /***/ 45232:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 12944))
+Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 46994))
 
 /***/ }),
 
-/***/ 12944:
+/***/ 46994:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -372,10 +372,10 @@ var next_image = __webpack_require__(52451);
 var image_default = /*#__PURE__*/__webpack_require__.n(next_image);
 ;// CONCATENATED MODULE: ./public/images/backgrounds/u1.jpg
 /* harmony default export */ const u1 = ({"src":"/_next/static/media/u1.ca8970ca.jpg","height":417,"width":626,"blurDataURL":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoKCgoKCgsMDAsPEA4QDxYUExMUFiIYGhgaGCIzICUgICUgMy03LCksNy1RQDg4QFFeT0pPXnFlZXGPiI+7u/sBCgoKCgoKCwwMCw8QDhAPFhQTExQWIhgaGBoYIjMgJSAgJSAzLTcsKSw3LVFAODhAUV5PSk9ecWVlcY+Ij7u7+//CABEIAAUACAMBIgACEQEDEQH/xAAoAAEBAAAAAAAAAAAAAAAAAAAABgEBAQAAAAAAAAAAAAAAAAAABQb/2gAMAwEAAhADEAAAAKYQj3//xAAcEAABAwUAAAAAAAAAAAAAAAACAAEDBBIiQpH/2gAIAQEAAT8ApZyOO99sur//xAAXEQEAAwAAAAAAAAAAAAAAAAACABIh/9oACAECAQE/AGldbP/EABYRAAMAAAAAAAAAAAAAAAAAAAABEf/aAAgBAwEBPwCI/9k=","blurWidth":8,"blurHeight":5});
-// EXTERNAL MODULE: ./public/images/backgrounds/u3.jpg
-var u3 = __webpack_require__(61631);
-// EXTERNAL MODULE: ./public/images/backgrounds/u4.jpg
-var u4 = __webpack_require__(2655);
+;// CONCATENATED MODULE: ./public/images/backgrounds/u3.jpg
+/* harmony default export */ const u3 = ({"src":"/_next/static/media/u3.505a0f97.jpg","height":417,"width":626,"blurDataURL":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoKCgoKCgsMDAsPEA4QDxYUExMUFiIYGhgaGCIzICUgICUgMy03LCksNy1RQDg4QFFeT0pPXnFlZXGPiI+7u/sBCgoKCgoKCwwMCw8QDhAPFhQTExQWIhgaGBoYIjMgJSAgJSAzLTcsKSw3LVFAODhAUV5PSk9ecWVlcY+Ij7u7+//CABEIAAUACAMBIgACEQEDEQH/xAAoAAEBAAAAAAAAAAAAAAAAAAAABwEBAQAAAAAAAAAAAAAAAAAABAX/2gAMAwEAAhADEAAAAKAJyf/EABkQAAIDAQAAAAAAAAAAAAAAAAIRAAEigf/aAAgBAQABPwAyWlTLPKn/xAAYEQACAwAAAAAAAAAAAAAAAAAAAQJCcv/aAAgBAgEBPwCdco//xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAgBAwEBPwCP/9k=","blurWidth":8,"blurHeight":5});
+;// CONCATENATED MODULE: ./public/images/backgrounds/u4.jpg
+/* harmony default export */ const u4 = ({"src":"/_next/static/media/u4.3612d7b6.jpg","height":417,"width":626,"blurDataURL":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoKCgoKCgsMDAsPEA4QDxYUExMUFiIYGhgaGCIzICUgICUgMy03LCksNy1RQDg4QFFeT0pPXnFlZXGPiI+7u/sBCgoKCgoKCwwMCw8QDhAPFhQTExQWIhgaGBoYIjMgJSAgJSAzLTcsKSw3LVFAODhAUV5PSk9ecWVlcY+Ij7u7+//CABEIAAUACAMBIgACEQEDEQH/xAAnAAEBAAAAAAAAAAAAAAAAAAAABgEBAAAAAAAAAAAAAAAAAAAAA//aAAwDAQACEAMQAAAAogrf/8QAGhAAAgIDAAAAAAAAAAAAAAAAAgMBBAARIf/aAAgBAQABPwAGmFas3fXDJTn/xAAcEQACAAcAAAAAAAAAAAAAAAABAgADBBESIbL/2gAIAQIBAT8ApyWlXbZybqP/xAAWEQADAAAAAAAAAAAAAAAAAAAAAjH/2gAIAQMBAT8Aan//2Q==","blurWidth":8,"blurHeight":5});
 ;// CONCATENATED MODULE: ./public/images/big/img5.jpg
 /* harmony default export */ const img5 = ({"src":"/_next/static/media/img5.d2cb4ef9.jpg","height":600,"width":800,"blurDataURL":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoKCgoKCgsMDAsPEA4QDxYUExMUFiIYGhgaGCIzICUgICUgMy03LCksNy1RQDg4QFFeT0pPXnFlZXGPiI+7u/sBCgoKCgoKCwwMCw8QDhAPFhQTExQWIhgaGBoYIjMgJSAgJSAzLTcsKSw3LVFAODhAUV5PSk9ecWVlcY+Ij7u7+//CABEIAAYACAMBIgACEQEDEQH/xAAoAAEBAAAAAAAAAAAAAAAAAAAABQEBAQAAAAAAAAAAAAAAAAAAAwT/2gAMAwEAAhADEAAAAKQoD//EABwQAAEEAwEAAAAAAAAAAAAAAAIBAwQhABESE//aAAgBAQABPwCC54SITjAAAdqDqasukq8//8QAFxEBAQEBAAAAAAAAAAAAAAAAAQIDAP/aAAgBAgEBPwDZZ1oO/8QAGxEAAgEFAAAAAAAAAAAAAAAAAQMAAgQRISL/2gAIAQMBAT8Atu0LNWzif//Z","blurWidth":8,"blurHeight":6});
 ;// CONCATENATED MODULE: ./public/images/big/img6.jpg
@@ -403,14 +403,14 @@ const itemData = [
         cols: 2
     },
     {
-        img: u3/* default */.Z,
+        img: u3,
         title: "Burger"
     },
     {
-        img: u4/* default */.Z
+        img: u4
     },
     {
-        img: u3/* default */.Z,
+        img: u3,
         cols: 2
     },
     {
@@ -419,7 +419,7 @@ const itemData = [
         rows: 2
     },
     {
-        img: u4/* default */.Z,
+        img: u4,
         cols: 2,
         rows: 2
     },
@@ -436,7 +436,7 @@ const itemData = [
         cols: 2
     },
     {
-        img: u3/* default */.Z,
+        img: u3,
         cols: 2
     }
 ];
@@ -511,7 +511,7 @@ const __default__ = proxy.default;
 var __webpack_require__ = require("../../../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [697,433,37,138,761], () => (__webpack_exec__(52224)));
+var __webpack_exports__ = __webpack_require__.X(0, [697,433,37,138], () => (__webpack_exec__(52224)));
 module.exports = __webpack_exports__;
 
 })();

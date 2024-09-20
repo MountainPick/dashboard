@@ -346,60 +346,104 @@ Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_re
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Login)
+/* harmony export */   "default": () => (/* binding */ Auth)
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(56786);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18038);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(17421);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_mui_material__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var next_navigation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(57114);
-/* harmony import */ var next_navigation__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_navigation__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17421);
+/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_mui_material__WEBPACK_IMPORTED_MODULE_2__);
 /* __next_internal_client_entry_do_not_use__ default auto */ 
 
 
-
-function Login() {
+function Auth() {
+    const [tabValue, setTabValue] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0); // 0 for Login, 1 for Sign Up
     const [username, setUsername] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
     const [password, setPassword] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
-    const router = (0,next_navigation__WEBPACK_IMPORTED_MODULE_2__.useRouter)();
-    const handleSubmit = (event)=>{
+    const [email, setEmail] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
+    const handleTabChange = (event, newValue)=>{
+        setTabValue(newValue);
+    };
+    const handleLoginSubmit = async (event)=>{
         event.preventDefault();
-        // Here you would typically validate credentials with your server
-        if (username && password) {
-            // For demo purposes, we're just checking if fields are non-empty
+        // Handle login logic
+        const response = await fetch("http://localhost:8000/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+        if (response.ok) {
+            alert("Login successful!");
+            // Set login state in local storage
             localStorage.setItem("isLoggedIn", "true");
-            router.push("/camera-dashboard");
+            window.location.href = "/camera-dashboard";
+        // Redirect to dashboard
         } else {
-            alert("Please enter both username and password");
+            alert("Login failed. Please try again.");
         }
     };
-    return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_3__.Container, {
+    const handleSignUpSubmit = async (event)=>{
+        event.preventDefault();
+        // Handle sign-up logic
+        const response = await fetch("http://localhost:8000/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email,
+                username,
+                password
+            })
+        });
+        if (response.ok) {
+            alert("Sign up successful!");
+        // Optionally redirect to login or dashboard
+        } else {
+            alert("Sign up failed. Please try again.");
+        }
+    };
+    return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Container, {
         component: "main",
         maxWidth: "xs",
-        children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_3__.Box, {
+        children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Box, {
             sx: {
-                marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center"
+                marginTop: 8
             },
             children: [
-                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_3__.Typography, {
-                    component: "h1",
-                    variant: "h5",
-                    children: "Sign in"
+                /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Tabs, {
+                    value: tabValue,
+                    onChange: handleTabChange,
+                    centered: true,
+                    children: [
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Tab, {
+                            label: "Login"
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Tab, {
+                            label: "Sign Up"
+                        })
+                    ]
                 }),
-                /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_3__.Box, {
+                tabValue === 0 && /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Box, {
                     component: "form",
-                    onSubmit: handleSubmit,
+                    onSubmit: handleLoginSubmit,
                     noValidate: true,
                     sx: {
                         mt: 1
                     },
                     children: [
-                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_3__.TextField, {
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Typography, {
+                            component: "h1",
+                            variant: "h5",
+                            children: "Login"
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.TextField, {
                             margin: "normal",
                             required: true,
                             fullWidth: true,
@@ -411,7 +455,7 @@ function Login() {
                             value: username,
                             onChange: (e)=>setUsername(e.target.value)
                         }),
-                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_3__.TextField, {
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.TextField, {
                             margin: "normal",
                             required: true,
                             fullWidth: true,
@@ -423,7 +467,7 @@ function Login() {
                             value: password,
                             onChange: (e)=>setPassword(e.target.value)
                         }),
-                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_3__.Button, {
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Button, {
                             type: "submit",
                             fullWidth: true,
                             variant: "contained",
@@ -432,6 +476,65 @@ function Login() {
                                 mb: 2
                             },
                             children: "Sign In"
+                        })
+                    ]
+                }),
+                tabValue === 1 && /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Box, {
+                    component: "form",
+                    onSubmit: handleSignUpSubmit,
+                    noValidate: true,
+                    sx: {
+                        mt: 1
+                    },
+                    children: [
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Typography, {
+                            component: "h1",
+                            variant: "h5",
+                            children: "Sign Up"
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.TextField, {
+                            margin: "normal",
+                            required: true,
+                            fullWidth: true,
+                            id: "email",
+                            label: "Email",
+                            name: "email",
+                            autoComplete: "email",
+                            value: email,
+                            onChange: (e)=>setEmail(e.target.value)
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.TextField, {
+                            margin: "normal",
+                            required: true,
+                            fullWidth: true,
+                            id: "signup-username",
+                            label: "Username",
+                            name: "username",
+                            autoComplete: "username",
+                            value: username,
+                            onChange: (e)=>setUsername(e.target.value)
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.TextField, {
+                            margin: "normal",
+                            required: true,
+                            fullWidth: true,
+                            name: "password",
+                            label: "Password",
+                            type: "password",
+                            id: "signup-password",
+                            autoComplete: "new-password",
+                            value: password,
+                            onChange: (e)=>setPassword(e.target.value)
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Button, {
+                            type: "submit",
+                            fullWidth: true,
+                            variant: "contained",
+                            sx: {
+                                mt: 3,
+                                mb: 2
+                            },
+                            children: "Sign Up"
                         })
                     ]
                 })

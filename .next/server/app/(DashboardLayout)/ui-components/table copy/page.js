@@ -345,59 +345,239 @@ __webpack_require__.r(__webpack_exports__);
 /***/ 10411:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 4013))
+Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 97677))
 
 /***/ }),
 
-/***/ 4013:
+/***/ 97677:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(56786);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17421);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_mui_material__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _mui_material_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(83476);
-/* harmony import */ var _mui_material_styles__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_mui_material_styles__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _app_DashboardLayout_components_dashboard_ProductPerformance__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12229);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "default": () => (/* binding */ page)
+});
+
+// EXTERNAL MODULE: external "next/dist/compiled/react/jsx-runtime"
+var jsx_runtime_ = __webpack_require__(56786);
+// EXTERNAL MODULE: ./node_modules/@mui/material/node/index.js
+var node = __webpack_require__(17421);
+// EXTERNAL MODULE: ./node_modules/@mui/material/node/styles/index.js
+var styles = __webpack_require__(83476);
+// EXTERNAL MODULE: external "next/dist/compiled/react"
+var react_ = __webpack_require__(18038);
+// EXTERNAL MODULE: ./src/app/(DashboardLayout)/components/shared/DashboardCard.tsx
+var DashboardCard = __webpack_require__(36434);
+;// CONCATENATED MODULE: ./src/app/(DashboardLayout)/components/dashboard/ProductPerformance.tsx
+
+
+
+
+const products = [
+    {
+        id: "1",
+        name: "Sunil Joshi",
+        post: "Web Designer",
+        pname: "Elite Admin",
+        priority: "Low",
+        pbg: "primary.main",
+        budget: "3.9"
+    },
+    {
+        id: "2",
+        name: "Andrew McDownland",
+        post: "Project Manager",
+        pname: "Real Homes WP Theme",
+        priority: "Medium",
+        pbg: "secondary.main",
+        budget: "24.5"
+    },
+    {
+        id: "3",
+        name: "Christopher Jamil",
+        post: "Project Manager",
+        pname: "MedicalPro WP Theme",
+        priority: "High",
+        pbg: "error.main",
+        budget: "12.8"
+    },
+    {
+        id: "4",
+        name: "Nirav Joshi",
+        post: "Frontend Engineer",
+        pname: "Hosting Press HTML",
+        priority: "Critical",
+        pbg: "success.main",
+        budget: "2.4"
+    }
+];
+const ProductPerfomance = ()=>{
+    return /*#__PURE__*/ jsx_runtime_.jsx(DashboardCard/* default */.Z, {
+        title: "Product Perfomance",
+        children: /*#__PURE__*/ jsx_runtime_.jsx(node.TableContainer, {
+            sx: {
+                width: {
+                    xs: "274px",
+                    sm: "100%"
+                }
+            },
+            children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.Table, {
+                "aria-label": "simple table",
+                sx: {
+                    whiteSpace: "nowrap",
+                    mt: 2
+                },
+                children: [
+                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableHead, {
+                        children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.TableRow, {
+                            children: [
+                                /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                        color: "textSecondary",
+                                        variant: "h6",
+                                        children: "Id"
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                        color: "textSecondary",
+                                        variant: "h6",
+                                        children: "Assigned"
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                        color: "textSecondary",
+                                        variant: "h6",
+                                        children: "Name"
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                        color: "textSecondary",
+                                        variant: "h6",
+                                        children: "Priority"
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                    align: "right",
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                        color: "textSecondary",
+                                        variant: "h6",
+                                        children: "Budget"
+                                    })
+                                })
+                            ]
+                        })
+                    }),
+                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableBody, {
+                        children: products.map((product)=>/*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.TableRow, {
+                                children: [
+                                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                            fontSize: "15px",
+                                            fontWeight: 500,
+                                            children: product.id
+                                        })
+                                    }),
+                                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Box, {
+                                            display: "flex",
+                                            alignItems: "center",
+                                            children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.Box, {
+                                                children: [
+                                                    /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                                        variant: "h6",
+                                                        fontWeight: 600,
+                                                        children: product.name
+                                                    }),
+                                                    /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                                        color: "textSecondary",
+                                                        fontSize: "13px",
+                                                        children: product.post
+                                                    })
+                                                ]
+                                            })
+                                        })
+                                    }),
+                                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Typography, {
+                                            color: "textSecondary",
+                                            variant: "h6",
+                                            children: product.pname
+                                        })
+                                    }),
+                                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Chip, {
+                                            sx: {
+                                                pl: "4px",
+                                                pr: "4px",
+                                                backgroundColor: product.pbg,
+                                                color: "#fff"
+                                            },
+                                            size: "small",
+                                            label: product.priority
+                                        })
+                                    }),
+                                    /*#__PURE__*/ jsx_runtime_.jsx(node.TableCell, {
+                                        align: "right",
+                                        children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.Typography, {
+                                            variant: "h6",
+                                            children: [
+                                                "$",
+                                                product.budget,
+                                                "k"
+                                            ]
+                                        })
+                                    })
+                                ]
+                            }, product.name))
+                    })
+                ]
+            })
+        })
+    });
+};
+/* harmony default export */ const ProductPerformance = (ProductPerfomance);
+
+;// CONCATENATED MODULE: ./src/app/(DashboardLayout)/ui-components/table copy/page.tsx
 /* __next_internal_client_entry_do_not_use__ default auto */ 
 
 
-const Item = (0,_mui_material_styles__WEBPACK_IMPORTED_MODULE_1__.styled)(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Paper)(({ theme })=>({
+const Item = (0,styles.styled)(node.Paper)(({ theme })=>({
         ...theme.typography.body1,
         textAlign: "center",
         color: theme.palette.text.secondary,
         height: 60,
         lineHeight: "60px"
     }));
-const darkTheme = (0,_mui_material_styles__WEBPACK_IMPORTED_MODULE_1__.createTheme)({
+const darkTheme = (0,styles.createTheme)({
     palette: {
         mode: "dark"
     }
 });
-const lightTheme = (0,_mui_material_styles__WEBPACK_IMPORTED_MODULE_1__.createTheme)({
+const lightTheme = (0,styles.createTheme)({
     palette: {
         mode: "light"
     }
 });
 
 const Tables = ()=>{
-    return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Grid, {
+    return /*#__PURE__*/ jsx_runtime_.jsx(node.Grid, {
         container: true,
         spacing: 0,
-        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Grid, {
+        children: /*#__PURE__*/ jsx_runtime_.jsx(node.Grid, {
             item: true,
             xs: 12,
             lg: 12,
-            children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_app_DashboardLayout_components_dashboard_ProductPerformance__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z, {})
+            children: /*#__PURE__*/ jsx_runtime_.jsx(ProductPerformance, {})
         })
     });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Tables);
+/* harmony default export */ const page = (Tables);
 
 
 /***/ }),
@@ -435,7 +615,7 @@ const __default__ = proxy.default;
 var __webpack_require__ = require("../../../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [697,433,37,434,229], () => (__webpack_exec__(94813)));
+var __webpack_exports__ = __webpack_require__.X(0, [697,433,37,434], () => (__webpack_exec__(94813)));
 module.exports = __webpack_exports__;
 
 })();
