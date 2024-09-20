@@ -368,7 +368,7 @@ function Auth() {
     const handleLoginSubmit = async (event)=>{
         event.preventDefault();
         // Handle login logic
-        const response = await fetch("http://localhost:8000/login", {
+        const response = await fetch("http://http://3.27.194.81/:8000/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -391,7 +391,7 @@ function Auth() {
     const handleSignUpSubmit = async (event)=>{
         event.preventDefault();
         // Handle sign-up logic
-        const response = await fetch("http://localhost:8000/signup", {
+        const response = await fetch("http://http://3.27.194.81/:8000/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

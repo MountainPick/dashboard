@@ -3,16 +3,16 @@
   "/(DashboardLayout)/page": "/",
   "/(DashboardLayout)/camera-dashboard/page": "/camera-dashboard",
   "/(DashboardLayout)/camera-stream/page": "/camera-stream",
-  "/(DashboardLayout)/login/page": "/login",
-  "/(DashboardLayout)/icons/page": "/icons",
   "/(DashboardLayout)/notification-details/page": "/notification-details",
+  "/(DashboardLayout)/icons/page": "/icons",
+  "/(DashboardLayout)/login/page": "/login",
   "/(DashboardLayout)/layout/footer/page": "/layout/footer",
-  "/(DashboardLayout)/ui-components/forms/page": "/ui-components/forms",
-  "/(DashboardLayout)/ui-components/alerts/page": "/ui-components/alerts",
   "/(DashboardLayout)/ui-components/buttons/page": "/ui-components/buttons",
-  "/(DashboardLayout)/ui-components/pagination/page": "/ui-components/pagination",
-  "/(DashboardLayout)/ui-components/ratings/page": "/ui-components/ratings",
+  "/(DashboardLayout)/ui-components/alerts/page": "/ui-components/alerts",
+  "/(DashboardLayout)/ui-components/forms/page": "/ui-components/forms",
+  "/(DashboardLayout)/ui-components/images/page": "/ui-components/images",
   "/(DashboardLayout)/ui-components/table copy/page": "/ui-components/table copy",
+  "/(DashboardLayout)/ui-components/ratings/page": "/ui-components/ratings",
   "/(DashboardLayout)/ui-components/table/page": "/ui-components/table",
-  "/(DashboardLayout)/ui-components/images/page": "/ui-components/images"
+  "/(DashboardLayout)/ui-components/pagination/page": "/ui-components/pagination"
 }
