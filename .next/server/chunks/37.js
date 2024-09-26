@@ -132,6 +132,8 @@ const Profile = ()=>{
         // Redirect to the login page
         window.location.href = "login";
     };
+    // Retrieve username from localStorage
+    const username = localStorage.getItem("username") || "User";
     return /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.Box, {
         children: [
             /*#__PURE__*/ (0,jsx_runtime_.jsxs)(node.IconButton, {
@@ -148,7 +150,7 @@ const Profile = ()=>{
                 onClick: handleClick2,
                 children: [
                     /*#__PURE__*/ jsx_runtime_.jsx(node.Avatar, {
-                        src: "/images/users/user2.jpg",
+                        // src={"/images/users/user2.jpg"}
                         alt: "ProfileImg",
                         sx: {
                             width: 30,
@@ -179,7 +181,7 @@ const Profile = ()=>{
                                 sx: {
                                     ml: 1
                                 },
-                                children: "Julia"
+                                children: username
                             }),
                             /*#__PURE__*/ jsx_runtime_.jsx(tabler_icons_react/* IconChevronDown */.C26, {
                                 width: "20",
@@ -314,7 +316,7 @@ const Notifications = ()=>{
     (0,react_.useEffect)(()=>{
         const fetchNotifications = async ()=>{
             try {
-                const response = await fetch("http://3.27.194.81:8000/notifications");
+                const response = await fetch("http://13.239.150.70:8000/notifications");
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
@@ -577,6 +579,12 @@ const Menuitems = [
         title: "Cameras",
         icon: tabler_icons_react/* IconLayoutGrid */.lp2,
         href: "/camera-dashboard"
+    },
+    {
+        id: uniqueId_default()(),
+        title: "Management",
+        icon: tabler_icons_react/* IconUser */.f7T,
+        href: "/management"
     }
 ];
 /* harmony default export */ const MenuItems = (Menuitems);

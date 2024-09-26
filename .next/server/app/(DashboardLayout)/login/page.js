@@ -362,13 +362,16 @@ function Auth() {
     const [username, setUsername] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
     const [password, setPassword] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
     const [email, setEmail] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
+    const [isConnectedMilestone, setIsConnectedMilestone] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false); // New state for milestone connection
+    const [milestoneUsername, setMilestoneUsername] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""); // Milestone username
+    const [milestonePassword, setMilestonePassword] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""); // Milestone password
     const handleTabChange = (event, newValue)=>{
         setTabValue(newValue);
     };
     const handleLoginSubmit = async (event)=>{
         event.preventDefault();
         // Handle login logic
-        const response = await fetch("http://3.27.194.81:8000/login", {
+        const response = await fetch("http://13.239.150.70:8000/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -379,11 +382,19 @@ function Auth() {
             })
         });
         if (response.ok) {
-            alert("Login successful!");
-            // Set login state in local storage
-            localStorage.setItem("isLoggedIn", "true");
-            window.location.href = "/camera-dashboard";
-        // Redirect to dashboard
+            const data = await response.json();
+            if (data.user_id) {
+                if (data.user_record.is_connected_milestone === 1) {
+                    alert("Login successful! Redirecting to camera dashboard...");
+                    localStorage.setItem("isLoggedIn", "true");
+                    localStorage.setItem("username", username); // Store username in localStorage
+                    window.location.href = "/camera-dashboard"; // Redirect to dashboard
+                } else {
+                    setIsConnectedMilestone(true); // Show connect milestone UI
+                }
+            } else {
+                setIsConnectedMilestone(false); // Show connect milestone UI
+            }
         } else {
             alert("Login failed. Please try again.");
         }
@@ -391,7 +402,7 @@ function Auth() {
     const handleSignUpSubmit = async (event)=>{
         event.preventDefault();
         // Handle sign-up logic
-        const response = await fetch("http://3.27.194.81:8000/signup", {
+        const response = await fetch("http://13.239.150.70:8000/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -404,9 +415,34 @@ function Auth() {
         });
         if (response.ok) {
             alert("Sign up successful!");
+            localStorage.setItem("isLoggedIn", "true"); // Set local storage after successful sign up
+            localStorage.setItem("username", username); // Store username in localStorage
         // Optionally redirect to login or dashboard
         } else {
             alert("Sign up failed. Please try again.");
+        }
+    };
+    const handleConnectMilestoneSubmit = async (event)=>{
+        event.preventDefault();
+        // Handle connect milestone logic
+        const response = await fetch("http://13.239.150.70:8000/connect_milestone", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                milestoneusername: milestoneUsername,
+                milestonepassword: milestonePassword
+            })
+        });
+        if (response.ok) {
+            alert("Connected to Milestone successfully!");
+            localStorage.setItem("isLoggedIn", "true"); // Set local storage after successful connection
+            localStorage.setItem("username", username); // Store username in localStorage
+            window.location.href = "/camera-dashboard"; // Redirect to dashboard
+        } else {
+            alert("Connection to Milestone failed. Please try again.");
         }
     };
     return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Container, {
@@ -430,7 +466,7 @@ function Auth() {
                         })
                     ]
                 }),
-                tabValue === 0 && /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Box, {
+                tabValue === 0 && !isConnectedMilestone && /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Box, {
                     component: "form",
                     onSubmit: handleLoginSubmit,
                     noValidate: true,
@@ -476,6 +512,60 @@ function Auth() {
                                 mb: 2
                             },
                             children: "Sign In"
+                        })
+                    ]
+                }),
+                isConnectedMilestone && /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Box, {
+                    component: "form",
+                    onSubmit: handleConnectMilestoneSubmit,
+                    noValidate: true,
+                    sx: {
+                        mt: 1
+                    },
+                    children: [
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Typography, {
+                            component: "h1",
+                            variant: "h5",
+                            children: "Connect with Milestone"
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("img", {
+                            src: "https://seeklogo.com/images/M/Milestone_Systems-logo-A40F19BC8A-seeklogo.com.png",
+                            alt: "Milestone Logo",
+                            style: {
+                                width: "100%",
+                                marginBottom: "16px"
+                            }
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.TextField, {
+                            margin: "normal",
+                            required: true,
+                            fullWidth: true,
+                            id: "milestone-username",
+                            label: "Milestone Username",
+                            name: "milestoneUsername",
+                            value: milestoneUsername,
+                            onChange: (e)=>setMilestoneUsername(e.target.value)
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.TextField, {
+                            margin: "normal",
+                            required: true,
+                            fullWidth: true,
+                            id: "milestone-password",
+                            label: "Milestone Password",
+                            type: "password",
+                            name: "milestonePassword",
+                            value: milestonePassword,
+                            onChange: (e)=>setMilestonePassword(e.target.value)
+                        }),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_2__.Button, {
+                            type: "submit",
+                            fullWidth: true,
+                            variant: "contained",
+                            sx: {
+                                mt: 3,
+                                mb: 2
+                            },
+                            children: "Connect"
                         })
                     ]
                 }),

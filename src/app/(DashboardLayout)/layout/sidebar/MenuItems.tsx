@@ -53,6 +53,12 @@ const Menuitems = [
     icon: IconLayoutGrid,
     href: "/camera-dashboard",
   },
+  {
+    id: uniqueId(),
+    title: "Management",
+    icon: IconUser,
+    href: "/management",
+  },
 ];
 
 export default Menuitems;

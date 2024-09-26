@@ -77,6 +77,9 @@ const Profile = () => {
     window.location.href = 'login'
   };
 
+  // Retrieve username from localStorage
+  const username = localStorage.getItem('username') || 'User';
+
   return (
     <Box>
       <IconButton
@@ -93,7 +96,7 @@ const Profile = () => {
         onClick={handleClick2}
       >
         <Avatar
-          src={"/images/users/user2.jpg"}
+          // src={"/images/users/user2.jpg"}
           alt={"ProfileImg"}
           sx={{
             width: 30,
@@ -124,7 +127,7 @@ const Profile = () => {
               ml: 1,
             }}
           >
-            Julia
+            {username}
           </Typography>
           <IconChevronDown width="20" height="20" />
         </Box>
