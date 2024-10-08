@@ -1,19 +1,19 @@
 {
   "/favicon.ico/route": "/favicon.ico",
   "/(DashboardLayout)/page": "/",
-  "/(DashboardLayout)/camera-stream/page": "/camera-stream",
-  "/(DashboardLayout)/icons/page": "/icons",
-  "/(DashboardLayout)/management/page": "/management",
   "/(DashboardLayout)/camera-dashboard/page": "/camera-dashboard",
+  "/(DashboardLayout)/icons/page": "/icons",
   "/(DashboardLayout)/login/page": "/login",
+  "/(DashboardLayout)/camera-stream/page": "/camera-stream",
+  "/(DashboardLayout)/management/page": "/management",
   "/(DashboardLayout)/notification-details/page": "/notification-details",
   "/(DashboardLayout)/layout/footer/page": "/layout/footer",
   "/(DashboardLayout)/ui-components/alerts/page": "/ui-components/alerts",
   "/(DashboardLayout)/ui-components/buttons/page": "/ui-components/buttons",
   "/(DashboardLayout)/ui-components/forms/page": "/ui-components/forms",
-  "/(DashboardLayout)/ui-components/images/page": "/ui-components/images",
-  "/(DashboardLayout)/ui-components/table copy/page": "/ui-components/table copy",
+  "/(DashboardLayout)/ui-components/pagination/page": "/ui-components/pagination",
   "/(DashboardLayout)/ui-components/table/page": "/ui-components/table",
   "/(DashboardLayout)/ui-components/ratings/page": "/ui-components/ratings",
-  "/(DashboardLayout)/ui-components/pagination/page": "/ui-components/pagination"
+  "/(DashboardLayout)/ui-components/images/page": "/ui-components/images",
+  "/(DashboardLayout)/ui-components/table copy/page": "/ui-components/table copy"
 }

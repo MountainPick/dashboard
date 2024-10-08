@@ -220,6 +220,54 @@ module.exports = require("next/dist/shared/lib/utils/warn-once");
 
 /***/ }),
 
+/***/ 39491:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("assert");
+
+/***/ }),
+
+/***/ 82361:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("events");
+
+/***/ }),
+
+/***/ 57147:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ 13685:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("http");
+
+/***/ }),
+
+/***/ 95687:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("https");
+
+/***/ }),
+
+/***/ 22037:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("os");
+
+/***/ }),
+
 /***/ 71017:
 /***/ ((module) => {
 
@@ -228,11 +276,43 @@ module.exports = require("path");
 
 /***/ }),
 
+/***/ 12781:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("stream");
+
+/***/ }),
+
+/***/ 76224:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("tty");
+
+/***/ }),
+
 /***/ 57310:
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("url");
+
+/***/ }),
+
+/***/ 73837:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("util");
+
+/***/ }),
+
+/***/ 59796:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("zlib");
 
 /***/ }),
 
@@ -352,8 +432,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18038);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(17421);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_mui_material__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(21145);
+/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17421);
+/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_mui_material__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _app_DashboardLayout_components_shared_DashboardCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(36434);
 /* harmony import */ var next_navigation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(57114);
 /* harmony import */ var next_navigation__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_navigation__WEBPACK_IMPORTED_MODULE_3__);
@@ -363,255 +444,249 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-const cameras = [
-    {
-        id: "1",
-        name: "Front Door Camera",
-        location: "Entrance",
-        model: "SecureCam Pro",
-        status: "Online",
-        statusColor: "success.main",
-        lastMaintenance: "2023-05-15"
-    },
-    {
-        id: "2",
-        name: "Backyard Camera",
-        location: "Rear Garden",
-        model: "OutdoorVision X",
-        status: "Disabled",
-        statusColor: "error.main",
-        lastMaintenance: "2023-04-20"
-    },
-    {
-        id: "3",
-        name: "Garage Camera",
-        location: "Garage",
-        model: "SecureCam Lite",
-        status: "Disabled",
-        statusColor: "error.main",
-        lastMaintenance: "2023-05-10"
-    },
-    {
-        id: "4",
-        name: "Living Room Camera",
-        location: "Living Room",
-        model: "IndoorVision 360",
-        status: "Disabled",
-        statusColor: "error.main",
-        lastMaintenance: "2023-05-18"
-    }
-];
 const CameraDashboard = ()=>{
     const [tabValue, setTabValue] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0);
+    const [cameras, setCameras] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
     const router = (0,next_navigation__WEBPACK_IMPORTED_MODULE_3__.useRouter)();
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        const fetchCamerasAndIds = async ()=>{
+            try {
+                const username = localStorage.getItem("username");
+                const [camerasResponse, cameraIdsResponse] = await Promise.all([
+                    axios__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.get(`http://localhost:8000/user_cameras/${username}`),
+                    axios__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.get("http://localhost:8000/get_camera_ids")
+                ]);
+                const fetchedCameras = camerasResponse.data.cameras.map((camera)=>({
+                        ...camera,
+                        enabled: false
+                    }));
+                const enabledCameraIds = Object.values(cameraIdsResponse.data.camera_ids);
+                // Update enabled status based on the fetched camera IDs
+                const updatedCameras = fetchedCameras.map((camera)=>({
+                        ...camera,
+                        enabled: enabledCameraIds.includes(camera.id)
+                    }));
+                setCameras(updatedCameras);
+            } catch (error) {
+                console.error("Error fetching cameras and IDs:", error);
+            }
+        };
+        fetchCamerasAndIds();
+    }, []);
     const handleTabChange = (event, newValue)=>{
         setTabValue(newValue);
     };
     const handleCameraClick = (cameraId)=>{
-        if (cameraId === "1") {
-            router.push(`/camera-stream?cameraId=${cameraId}`);
+        router.push(`/camera-stream?cameraId=${cameraId}`);
+    };
+    const handleToggle = (cameraId, currentStatus)=>{
+        const enabledCount = cameras.filter((cam)=>cam.enabled).length;
+        if (!currentStatus && enabledCount >= 2) {
+            alert("You can only enable up to 2 cameras.");
+            return;
+        }
+        const updatedCameras = cameras.map((camera)=>camera.id === cameraId ? {
+                ...camera,
+                enabled: !currentStatus
+            } : camera);
+        setCameras(updatedCameras);
+    };
+    const handleSave = async ()=>{
+        const enabledCameras = cameras.filter((cam)=>cam.enabled);
+        if (enabledCameras.length !== 2) {
+            alert("Please select exactly 2 cameras before saving.");
+            return;
+        }
+        try {
+            const response = await axios__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.post("http://localhost:8000/set_camera_ids", {
+                camera_id_1: enabledCameras[0].id,
+                camera_id_2: enabledCameras[1].id
+            });
+            alert(response.data.message);
+        } catch (error) {
+            console.error("Error saving camera IDs:", error);
+            alert("Failed to save camera IDs. Please try again.");
         }
     };
-    return /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Box, {
+    return /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Box, {
         children: [
-            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Tabs, {
+            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Tabs, {
                 value: tabValue,
                 onChange: handleTabChange,
                 children: [
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Tab, {
+                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Tab, {
                         label: "List View"
                     }),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Tab, {
+                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Tab, {
                         label: "Grid View"
                     })
                 ]
             }),
-            tabValue === 0 && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableContainer, {
-                children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Table, {
-                    "aria-label": "camera list table",
-                    children: [
-                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableHead, {
-                            children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableRow, {
-                                children: [
-                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableCell, {
-                                        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                            color: "textSecondary",
-                                            variant: "h6",
-                                            children: "Id"
-                                        })
-                                    }),
-                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableCell, {
-                                        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                            color: "textSecondary",
-                                            variant: "h6",
-                                            children: "Name"
-                                        })
-                                    }),
-                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableCell, {
-                                        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                            color: "textSecondary",
-                                            variant: "h6",
-                                            children: "Location"
-                                        })
-                                    }),
-                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableCell, {
-                                        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                            color: "textSecondary",
-                                            variant: "h6",
-                                            children: "Status"
-                                        })
-                                    }),
-                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableCell, {
-                                        align: "right",
-                                        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                            color: "textSecondary",
-                                            variant: "h6",
-                                            children: "Last Maintenance"
-                                        })
-                                    })
-                                ]
-                            })
-                        }),
-                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableBody, {
-                            children: cameras.map((camera)=>/*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableRow, {
-                                    onClick: ()=>handleCameraClick(camera.id),
-                                    sx: {
-                                        cursor: camera.id === "1" ? "pointer" : "not-allowed",
-                                        "&:hover": camera.id === "1" ? {
-                                            backgroundColor: "action.hover"
-                                        } : {},
-                                        opacity: camera.id === "1" ? 1 : 0.5
-                                    },
-                                    children: [
-                                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableCell, {
-                                            children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                                fontSize: "15px",
-                                                fontWeight: 500,
-                                                children: camera.id
-                                            })
-                                        }),
-                                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableCell, {
-                                            children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Box, {
-                                                display: "flex",
-                                                alignItems: "center",
-                                                children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Box, {
-                                                    children: [
-                                                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                                            variant: "h6",
-                                                            fontWeight: 600,
-                                                            children: camera.name
-                                                        }),
-                                                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                                            color: "textSecondary",
-                                                            fontSize: "13px",
-                                                            children: camera.model
-                                                        })
-                                                    ]
+            tabValue === 0 && /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+                children: [
+                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableContainer, {
+                        children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Table, {
+                            "aria-label": "camera list table",
+                            children: [
+                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableHead, {
+                                    children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableRow, {
+                                        children: [
+                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableCell, {
+                                                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                                                    color: "textSecondary",
+                                                    variant: "h6",
+                                                    children: "ID"
+                                                })
+                                            }),
+                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableCell, {
+                                                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                                                    color: "textSecondary",
+                                                    variant: "h6",
+                                                    children: "Name"
+                                                })
+                                            }),
+                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableCell, {
+                                                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                                                    color: "textSecondary",
+                                                    variant: "h6",
+                                                    children: "Channel"
+                                                })
+                                            }),
+                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableCell, {
+                                                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                                                    color: "textSecondary",
+                                                    variant: "h6",
+                                                    children: "Enabled"
+                                                })
+                                            }),
+                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableCell, {
+                                                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                                                    color: "textSecondary",
+                                                    variant: "h6",
+                                                    children: "Last Modified"
                                                 })
                                             })
-                                        }),
-                                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableCell, {
-                                            children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                                color: "textSecondary",
-                                                variant: "h6",
-                                                children: camera.location
-                                            })
-                                        }),
-                                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableCell, {
-                                            children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Chip, {
-                                                sx: {
-                                                    pl: "4px",
-                                                    pr: "4px",
-                                                    backgroundColor: camera.statusColor,
-                                                    color: "#fff"
-                                                },
-                                                size: "small",
-                                                label: camera.status
-                                            })
-                                        }),
-                                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.TableCell, {
-                                            align: "right",
-                                            children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                                variant: "h6",
-                                                children: camera.lastMaintenance
-                                            })
-                                        })
-                                    ]
-                                }, camera.id))
+                                        ]
+                                    })
+                                }),
+                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableBody, {
+                                    children: cameras.map((camera)=>/*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableRow, {
+                                            onClick: ()=>handleCameraClick(camera.id),
+                                            sx: {
+                                                cursor: "pointer",
+                                                "&:hover": {
+                                                    backgroundColor: "action.hover"
+                                                }
+                                            },
+                                            children: [
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableCell, {
+                                                    children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                                                        fontSize: "15px",
+                                                        fontWeight: 500,
+                                                        children: camera.id
+                                                    })
+                                                }),
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableCell, {
+                                                    children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Box, {
+                                                        children: [
+                                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                                                                variant: "h6",
+                                                                fontWeight: 600,
+                                                                children: camera.displayName
+                                                            }),
+                                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                                                                color: "textSecondary",
+                                                                fontSize: "13px",
+                                                                children: camera.name
+                                                            })
+                                                        ]
+                                                    })
+                                                }),
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableCell, {
+                                                    children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                                                        variant: "body2",
+                                                        children: camera.channel
+                                                    })
+                                                }),
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableCell, {
+                                                    children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Switch, {
+                                                        checked: camera.enabled,
+                                                        onChange: ()=>handleToggle(camera.id, camera.enabled),
+                                                        onClick: (e)=>e.stopPropagation()
+                                                    })
+                                                }),
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.TableCell, {
+                                                    children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                                                        variant: "body2",
+                                                        children: new Date(camera.lastModified).toLocaleString()
+                                                    })
+                                                })
+                                            ]
+                                        }, camera.id))
+                                })
+                            ]
                         })
-                    ]
-                })
+                    }),
+                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Box, {
+                        mt: 2,
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Button, {
+                            variant: "contained",
+                            color: "primary",
+                            onClick: handleSave,
+                            children: "Save"
+                        })
+                    })
+                ]
             }),
-            tabValue === 1 && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Grid, {
+            tabValue === 1 && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Grid, {
                 container: true,
                 spacing: 2,
-                children: cameras.map((camera)=>/*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Grid, {
+                children: cameras.map((camera)=>/*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Grid, {
                         item: true,
                         xs: 12,
                         sm: 6,
                         children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_app_DashboardLayout_components_shared_DashboardCard__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z, {
-                            children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Box, {
+                            children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Box, {
                                 onClick: ()=>handleCameraClick(camera.id),
                                 sx: {
-                                    cursor: camera.id === "1" ? "pointer" : "not-allowed",
-                                    "&:hover": camera.id === "1" ? {
+                                    cursor: "pointer",
+                                    "&:hover": {
                                         backgroundColor: "action.hover"
-                                    } : {},
-                                    opacity: camera.id === "1" ? 1 : 0.5
+                                    }
                                 },
                                 children: [
-                                    camera.id === "1" ? /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(CameraStream, {}) : /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("img", {
-                                        src: camera.status === "Disabled" ? "https://t4.ftcdn.net/jpg/04/35/65/05/360_F_435650529_fdtx8euYTrcxH5NEAWONH2zQYOEWfgrA.jpg" : "/images/camera/camera-1.jpg",
-                                        alt: camera.name,
-                                        style: {
-                                            width: "100%",
-                                            height: "200px",
-                                            objectFit: "cover"
-                                        }
+                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(CameraStream, {
+                                        cameraId: camera.id
                                     }),
-                                    /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Box, {
+                                    /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Box, {
                                         p: 2,
+                                        sx: {
+                                            paddingTop: "60px"
+                                        },
                                         children: [
-                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
+                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
                                                 variant: "h6",
                                                 fontWeight: 600,
                                                 children: camera.name
                                             }),
-                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                                color: "textSecondary",
-                                                fontSize: "13px",
-                                                children: camera.model
-                                            }),
-                                            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                                                color: "textSecondary",
-                                                variant: "body2",
-                                                children: [
-                                                    "Location: ",
-                                                    camera.location
-                                                ]
-                                            }),
-                                            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Box, {
+                                            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Box, {
                                                 display: "flex",
                                                 justifyContent: "space-between",
                                                 alignItems: "center",
                                                 mt: 1,
                                                 children: [
-                                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Chip, {
-                                                        sx: {
-                                                            pl: "4px",
-                                                            pr: "4px",
-                                                            backgroundColor: camera.statusColor,
-                                                            color: "#fff"
-                                                        },
-                                                        size: "small",
-                                                        label: camera.status
+                                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Switch, {
+                                                        checked: camera.enabled,
+                                                        onChange: ()=>handleToggle(camera.id, camera.enabled),
+                                                        onClick: (e)=>e.stopPropagation()
                                                     }),
-                                                    /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
+                                                    /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
                                                         variant: "body2",
                                                         children: [
-                                                            "Last Maintenance: ",
-                                                            camera.lastMaintenance
+                                                            "Last Modified: ",
+                                                            new Date(camera.lastModified).toLocaleString()
                                                         ]
                                                     })
                                                 ]
@@ -626,33 +701,43 @@ const CameraDashboard = ()=>{
         ]
     });
 };
-const CameraStream = ()=>{
-    const searchParams = (0,next_navigation__WEBPACK_IMPORTED_MODULE_3__.useSearchParams)();
-    const cameraId = searchParams.get("cameraId");
+const CameraStream = ({ cameraId })=>{
     const [imageUrl, setImageUrl] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
     (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
         const currentHost = window.location.hostname;
-        const ws = new WebSocket(`ws://${currentHost}:8000/ws`);
+        console.log(`Connecting to WebSocket for camera ${cameraId} on ${currentHost}`);
+        const ws = new WebSocket(`ws://${currentHost}:8000/ws/frontend/${cameraId}`);
         ws.onmessage = (event)=>{
-            const data = JSON.parse(event.data);
-            if (data.type === "frame") {
-                setImageUrl(`data:image/jpeg;base64,${data.frame}`);
+            try {
+                const data = JSON.parse(event.data);
+                console.log(`Received data keys: ${Object.keys(data).join(", ")}`);
+                if (data.camera_id === cameraId && data.image) {
+                    console.log(`Received image data for camera ${cameraId}`);
+                    setImageUrl(`data:image/jpeg;base64,${data.image}`);
+                }
+            } catch (error) {
+                console.error("Error parsing WebSocket message:", error);
             }
         };
+        ws.onopen = ()=>{
+            console.log(`WebSocket connection opened for camera ${cameraId}`);
+        };
         ws.onclose = ()=>{
-            console.log("WebSocket closed. Attempting to reconnect...");
+            console.log(`WebSocket closed for camera ${cameraId}. Attempting to reconnect...`);
             setTimeout(()=>{
                 window.location.reload();
             }, 1000);
         };
         ws.onerror = (error)=>{
-            console.error("WebSocket Error: ", error);
+            console.error(`WebSocket Error for camera ${cameraId}: `, error);
         };
         return ()=>{
             ws.close();
         };
-    }, []);
-    return /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Box, {
+    }, [
+        cameraId
+    ]);
+    return /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Box, {
         sx: {
             display: "flex",
             flexDirection: "column",
@@ -662,19 +747,15 @@ const CameraStream = ()=>{
             backgroundColor: "#F0F4FF"
         },
         children: [
-            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Typography, {
-                variant: "h4",
-                component: "h1",
-                gutterBottom: true,
-                children: [
-                    "Camera Stream ",
-                    cameraId
-                ]
+            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Typography, {
+                variant: "h6",
+                component: "h2",
+                gutterBottom: true
             }),
-            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_4__.Box, {
+            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_5__.Box, {
                 component: "img",
-                src: imageUrl,
-                alt: "Live Video Stream",
+                src: imageUrl || "https://via.placeholder.com/300x200?text=No+Stream",
+                alt: `Live Video Stream ${cameraId}`,
                 sx: {
                     maxWidth: "100%",
                     height: "auto",
@@ -723,7 +804,7 @@ const __default__ = proxy.default;
 var __webpack_require__ = require("../../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [697,433,37,434], () => (__webpack_exec__(8538)));
+var __webpack_exports__ = __webpack_require__.X(0, [697,433,145,37,434], () => (__webpack_exec__(8538)));
 module.exports = __webpack_exports__;
 
 })();

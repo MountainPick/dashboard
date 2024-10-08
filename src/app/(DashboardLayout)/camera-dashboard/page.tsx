@@ -1,61 +1,93 @@
 'use client';
-import { useState } from 'react';
-import { Grid, Tabs, Tab, Box, Typography, Chip, Table, TableBody, TableCell, TableHead, TableRow, TableContainer } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Grid, Tabs, Tab, Box, Typography, Switch, Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Button } from "@mui/material";
 import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
 import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
-import React, { useEffect } from 'react';
 
-const cameras = [
-  {
-    id: "1",
-    name: "Front Door Camera",
-    location: "Entrance",
-    model: "SecureCam Pro",
-    status: "Online",
-    statusColor: "success.main",
-    lastMaintenance: "2023-05-15",
-  },
-  {
-    id: "2",
-    name: "Backyard Camera",
-    location: "Rear Garden",
-    model: "OutdoorVision X",
-    status: "Disabled",
-    statusColor: "error.main",
-    lastMaintenance: "2023-04-20",
-  },
-  {
-    id: "3",
-    name: "Garage Camera",
-    location: "Garage",
-    model: "SecureCam Lite",
-    status: "Disabled",
-    statusColor: "error.main",
-    lastMaintenance: "2023-05-10",
-  },
-  {
-    id: "4",
-    name: "Living Room Camera",
-    location: "Living Room",
-    model: "IndoorVision 360",
-    status: "Disabled",
-    statusColor: "error.main",
-    lastMaintenance: "2023-05-18",
-  },
-];
+interface Camera {
+  id: string;
+  name: string;
+  displayName: string;
+  enabled: boolean;
+  channel: number;
+  description: string;
+  lastModified: string;
+}
 
 const CameraDashboard = () => {
   const [tabValue, setTabValue] = useState(0);
+  const [cameras, setCameras] = useState<Camera[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchCamerasAndIds = async () => {
+      try {
+        const username = localStorage.getItem('username');
+        const [camerasResponse, cameraIdsResponse] = await Promise.all([
+          axios.get(`http://localhost:8000/user_cameras/${username}`),
+          axios.get('http://localhost:8000/get_camera_ids')
+        ]);
+
+        const fetchedCameras = camerasResponse.data.cameras.map((camera: any) => ({
+          ...camera,
+          enabled: false, // Start with all cameras disabled
+        }));
+
+        const enabledCameraIds = Object.values(cameraIdsResponse.data.camera_ids);
+
+        // Update enabled status based on the fetched camera IDs
+        const updatedCameras = fetchedCameras.map((camera: Camera) => ({
+          ...camera,
+          enabled: enabledCameraIds.includes(camera.id)
+        }));
+
+        setCameras(updatedCameras);
+      } catch (error) {
+        console.error('Error fetching cameras and IDs:', error);
+      }
+    };
+
+    fetchCamerasAndIds();
+  }, []);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
   const handleCameraClick = (cameraId: string) => {
-    if (cameraId === "1") {
-      router.push(`/camera-stream?cameraId=${cameraId}`);
+    router.push(`/camera-stream?cameraId=${cameraId}`);
+  };
+
+  const handleToggle = (cameraId: string, currentStatus: boolean) => {
+    const enabledCount = cameras.filter(cam => cam.enabled).length;
+    if (!currentStatus && enabledCount >= 2) {
+      alert("You can only enable up to 2 cameras.");
+      return;
+    }
+
+    const updatedCameras = cameras.map(camera =>
+      camera.id === cameraId ? { ...camera, enabled: !currentStatus } : camera
+    );
+    setCameras(updatedCameras);
+  };
+
+  const handleSave = async () => {
+    const enabledCameras = cameras.filter(cam => cam.enabled);
+    if (enabledCameras.length !== 2) {
+      alert("Please select exactly 2 cameras before saving.");
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8000/set_camera_ids', {
+        camera_id_1: enabledCameras[0].id,
+        camera_id_2: enabledCameras[1].id,
+      });
+      alert(response.data.message);
+    } catch (error) {
+      console.error('Error saving camera IDs:', error);
+      alert("Failed to save camera IDs. Please try again.");
     }
   };
 
@@ -66,72 +98,55 @@ const CameraDashboard = () => {
         <Tab label="Grid View" />
       </Tabs>
       {tabValue === 0 && (
-        <TableContainer>
-          <Table aria-label="camera list table">
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Typography color="textSecondary" variant="h6">Id</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography color="textSecondary" variant="h6">Name</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography color="textSecondary" variant="h6">Location</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography color="textSecondary" variant="h6">Status</Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <Typography color="textSecondary" variant="h6">Last Maintenance</Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {cameras.map((camera) => (
-                <TableRow
-                  key={camera.id}
-                  onClick={() => handleCameraClick(camera.id)}
-                  sx={{
-                    cursor: camera.id === "1" ? 'pointer' : 'not-allowed',
-                    '&:hover': camera.id === "1" ? { backgroundColor: 'action.hover' } : {},
-                    opacity: camera.id === "1" ? 1 : 0.5,
-                  }}
-                >
-                  <TableCell>
-                    <Typography fontSize="15px" fontWeight={500}>{camera.id}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Box display="flex" alignItems="center">
-                      <Box>
-                        <Typography variant="h6" fontWeight={600}>{camera.name}</Typography>
-                        <Typography color="textSecondary" fontSize="13px">{camera.model}</Typography>
-                      </Box>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Typography color="textSecondary" variant="h6">{camera.location}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      sx={{
-                        pl: "4px",
-                        pr: "4px",
-                        backgroundColor: camera.statusColor,
-                        color: "#fff",
-                      }}
-                      size="small"
-                      label={camera.status}
-                    />
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography variant="h6">{camera.lastMaintenance}</Typography>
-                  </TableCell>
+        <>
+          <TableContainer>
+            <Table aria-label="camera list table">
+              <TableHead>
+                <TableRow>
+                  <TableCell><Typography color="textSecondary" variant="h6">ID</Typography></TableCell>
+                  <TableCell><Typography color="textSecondary" variant="h6">Name</Typography></TableCell>
+                  <TableCell><Typography color="textSecondary" variant="h6">Channel</Typography></TableCell>
+                  <TableCell><Typography color="textSecondary" variant="h6">Enabled</Typography></TableCell>
+                  <TableCell><Typography color="textSecondary" variant="h6">Last Modified</Typography></TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {cameras.map((camera) => (
+                  <TableRow
+                    key={camera.id}
+                    onClick={() => handleCameraClick(camera.id)}
+                    sx={{
+                      cursor: 'pointer',
+                      '&:hover': { backgroundColor: 'action.hover' },
+                    }}
+                  >
+                    <TableCell><Typography fontSize="15px" fontWeight={500}>{camera.id}</Typography></TableCell>
+                    <TableCell>
+                      <Box>
+                        <Typography variant="h6" fontWeight={600}>{camera.displayName}</Typography>
+                        <Typography color="textSecondary" fontSize="13px">{camera.name}</Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell><Typography variant="body2">{camera.channel}</Typography></TableCell>
+                    <TableCell>
+                      <Switch
+                        checked={camera.enabled}
+                        onChange={() => handleToggle(camera.id, camera.enabled)}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </TableCell>
+                    <TableCell><Typography variant="body2">{new Date(camera.lastModified).toLocaleString()}</Typography></TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Box mt={2} display="flex" justifyContent="flex-end">
+            <Button variant="contained" color="primary" onClick={handleSave}>
+              Save
+            </Button>
+          </Box>
+        </>
       )}
       {tabValue === 1 && (
         <Grid container spacing={2}>
@@ -140,29 +155,19 @@ const CameraDashboard = () => {
               <DashboardCard>
                 <Box
                   onClick={() => handleCameraClick(camera.id)}
-                  sx={{ cursor: camera.id === "1" ? 'pointer' : 'not-allowed', '&:hover': camera.id === "1" ? { backgroundColor: 'action.hover' } : {}, opacity: camera.id === "1" ? 1 : 0.5 }}
+                  sx={{ cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
                 >
-                  {camera.id === "1" ? (
-                    <CameraStream />
-                  ) : (
-                    <img src={camera.status === "Disabled" ? 'https://t4.ftcdn.net/jpg/04/35/65/05/360_F_435650529_fdtx8euYTrcxH5NEAWONH2zQYOEWfgrA.jpg' : '/images/camera/camera-1.jpg'} alt={camera.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
-                  )}
-                  <Box p={2}>
+                  <CameraStream cameraId={camera.id} />
+                  <Box p={2}
+                    sx={{ paddingTop: "60px" }}>
                     <Typography variant="h6" fontWeight={600}>{camera.name}</Typography>
-                    <Typography color="textSecondary" fontSize="13px">{camera.model}</Typography>
-                    <Typography color="textSecondary" variant="body2">Location: {camera.location}</Typography>
                     <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
-                      <Chip
-                        sx={{
-                          pl: "4px",
-                          pr: "4px",
-                          backgroundColor: camera.statusColor,
-                          color: "#fff",
-                        }}
-                        size="small"
-                        label={camera.status}
+                      <Switch
+                        checked={camera.enabled}
+                        onChange={() => handleToggle(camera.id, camera.enabled)}
+                        onClick={(e) => e.stopPropagation()}
                       />
-                      <Typography variant="body2">Last Maintenance: {camera.lastMaintenance}</Typography>
+                      <Typography variant="body2">Last Modified: {new Date(camera.lastModified).toLocaleString()}</Typography>
                     </Box>
                   </Box>
                 </Box>
@@ -175,37 +180,46 @@ const CameraDashboard = () => {
   );
 };
 
-const CameraStream: React.FC = () => {
-  const searchParams = useSearchParams();
-  const cameraId = searchParams.get('cameraId');
+const CameraStream: React.FC<{ cameraId: string }> = ({ cameraId }) => {
   const [imageUrl, setImageUrl] = useState<string>('');
 
   useEffect(() => {
     const currentHost = window.location.hostname;
-    const ws = new WebSocket(`ws://${currentHost}:8000/ws`);
+    console.log(`Connecting to WebSocket for camera ${cameraId} on ${currentHost}`);
+    const ws = new WebSocket(`ws://${currentHost}:8000/ws/frontend/${cameraId}`);
 
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'frame') {
-        setImageUrl(`data:image/jpeg;base64,${data.frame}`);
+      try {
+        const data = JSON.parse(event.data);
+        console.log(`Received data keys: ${Object.keys(data).join(', ')}`);
+        if (data.camera_id === cameraId && data.image) {
+          console.log(`Received image data for camera ${cameraId}`);
+          setImageUrl(`data:image/jpeg;base64,${data.image}`);
+        }
+      } catch (error) {
+        console.error('Error parsing WebSocket message:', error);
       }
     };
 
+    ws.onopen = () => {
+      console.log(`WebSocket connection opened for camera ${cameraId}`);
+    };
+
     ws.onclose = () => {
-      console.log('WebSocket closed. Attempting to reconnect...');
+      console.log(`WebSocket closed for camera ${cameraId}. Attempting to reconnect...`);
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     };
 
     ws.onerror = (error) => {
-      console.error('WebSocket Error: ', error);
+      console.error(`WebSocket Error for camera ${cameraId}: `, error);
     };
 
     return () => {
       ws.close();
     };
-  }, []);
+  }, [cameraId]);
 
   return (
     <Box
@@ -218,13 +232,13 @@ const CameraStream: React.FC = () => {
         backgroundColor: '#F0F4FF',
       }}
     >
-      <Typography variant="h4" component="h1" gutterBottom>
-        Camera Stream {cameraId}
+      <Typography variant="h6" component="h2" gutterBottom>
+        {/* Camera Stream {cameraId} */}
       </Typography>
       <Box
         component="img"
-        src={imageUrl}
-        alt="Live Video Stream"
+        src={imageUrl || 'https://via.placeholder.com/300x200?text=No+Stream'}
+        alt={`Live Video Stream ${cameraId}`}
         sx={{
           maxWidth: '100%',
           height: 'auto',
