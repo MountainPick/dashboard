@@ -453,8 +453,8 @@ const CameraDashboard = ()=>{
             try {
                 const username = localStorage.getItem("username");
                 const [camerasResponse, cameraIdsResponse] = await Promise.all([
-                    axios__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.get(`http://localhost:8000/user_cameras/${username}`),
-                    axios__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.get("http://localhost:8000/get_camera_ids")
+                    axios__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.get(`http://13.239.150.70:8000/user_cameras/${username}`),
+                    axios__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.get("http://13.239.150.70:8000/get_camera_ids")
                 ]);
                 const fetchedCameras = camerasResponse.data.cameras.map((camera)=>({
                         ...camera,
@@ -498,7 +498,7 @@ const CameraDashboard = ()=>{
             return;
         }
         try {
-            const response = await axios__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.post("http://localhost:8000/set_camera_ids", {
+            const response = await axios__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z.post("http://13.239.150.70:8000/set_camera_ids", {
                 camera_id_1: enabledCameras[0].id,
                 camera_id_2: enabledCameras[1].id
             });
