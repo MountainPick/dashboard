@@ -371,7 +371,8 @@ function Auth() {
     const handleLoginSubmit = async (event)=>{
         event.preventDefault();
         // Handle login logic
-        const response = await fetch("http://13.239.150.70:8000/login", {
+        const currentHost = window.location.hostname;
+        const response = await fetch(`http://${currentHost}:8000/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -401,8 +402,9 @@ function Auth() {
     };
     const handleSignUpSubmit = async (event)=>{
         event.preventDefault();
+        const currentHost = window.location.hostname;
         // Handle sign-up logic
-        const response = await fetch("http://13.239.150.70:8000/signup", {
+        const response = await fetch(`http://${currentHost}:8000/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -425,7 +427,8 @@ function Auth() {
     const handleConnectMilestoneSubmit = async (event)=>{
         event.preventDefault();
         // Handle connect milestone logic
-        const response = await fetch("http://13.239.150.70:8000/connect_milestone", {
+        const currentHost = window.location.hostname;
+        const response = await fetch(`http://${currentHost}:8000/connect_milestone`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
