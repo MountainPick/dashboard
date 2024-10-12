@@ -38,7 +38,7 @@ const NotificationDetails = () => {
         const fetchNotification = async () => {
             if (camera_id && frame_id) {
                 try {
-                    const currentHost = window.location.hostname;
+                    const currentHost = '13.239.150.70';
                     const response = await fetch(`http://${currentHost}:8000/notifications/${camera_id}/${frame_id}`);
                     if (!response.ok) {
                         throw new Error('Failed to fetch notification');

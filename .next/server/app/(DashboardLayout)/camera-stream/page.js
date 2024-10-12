@@ -365,7 +365,7 @@ const CameraStream = ()=>{
     const cameraId = searchParams.get("cameraId");
     const [imageUrl, setImageUrl] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
     (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
-        const currentHost = window.location.hostname;
+        const currentHost = "13.239.150.70";
         const ws = new WebSocket(`ws://${currentHost}:8000/ws`);
         ws.onmessage = (event)=>{
             const data = JSON.parse(event.data);

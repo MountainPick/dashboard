@@ -316,7 +316,7 @@ const Notifications = ()=>{
     (0,react_.useEffect)(()=>{
         const fetchNotifications = async ()=>{
             try {
-                const currentHost = window.location.hostname;
+                const currentHost = "13.239.150.70";
                 const response = await fetch(`http://${currentHost}:8000/notifications`);
                 if (!response.ok) {
                     throw new Error("Network response was not ok");

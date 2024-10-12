@@ -18,7 +18,7 @@ export default function Auth() {
     const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // Handle login logic
-        const currentHost = window.location.hostname;
+        const currentHost = '13.239.150.70';
         const response = await fetch(`http://${currentHost}:8000/login`, {
             method: 'POST',
             headers: {
@@ -48,7 +48,7 @@ export default function Auth() {
 
     const handleSignUpSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const currentHost = window.location.hostname;
+        const currentHost = '13.239.150.70';
         // Handle sign-up logic
         const response = await fetch(`http://${currentHost}:8000/signup`, {
             method: 'POST',
@@ -71,7 +71,7 @@ export default function Auth() {
     const handleConnectMilestoneSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // Handle connect milestone logic
-        const currentHost = window.location.hostname;
+        const currentHost = '13.239.150.70';
         const response = await fetch(`http://${currentHost}:8000/connect_milestone`, {
             method: 'POST',
             headers: {

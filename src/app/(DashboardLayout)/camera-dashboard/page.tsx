@@ -181,7 +181,7 @@ const CameraStream: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string>('');
 
   useEffect(() => {
-    const currentHost = window.location.hostname;
+    const currentHost = '13.239.150.70';
     const ws = new WebSocket(`ws://${currentHost}:8000/ws`);
 
     ws.onmessage = (event) => {
